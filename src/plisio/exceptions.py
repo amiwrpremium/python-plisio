@@ -6,11 +6,7 @@ from json import loads as _loads
 from . import _types as _t
 
 
-__all__ = [
-    'PlisioException',
-    'PlisioAPIException',
-    'PlisioRequestException'
-]
+__all__ = ["PlisioException", "PlisioAPIException", "PlisioRequestException"]
 
 
 class PlisioException(Exception):
@@ -34,21 +30,21 @@ class PlisioAPIException(PlisioException):
             text (str): Text.
         """
         self.code = 0
-        self.name = ''
+        self.name = ""
 
         try:
             json_res = _loads(text)
         except ValueError:
-            self.message = f'Invalid JSON error message from Plisio: {response.text}'
+            self.message = f"Invalid JSON error message from Plisio: {response.text}"
         else:
-            data = json_res['data']
-            self.code = data['code']
-            self.message = data['message']
-            self.name = data['name']
+            data = json_res["data"]
+            self.code = data["code"]
+            self.message = data["message"]
+            self.name = data["name"]
 
         self.response = response
         self.status_code = status_code
-        self.request = getattr(response, 'request', None)
+        self.request = getattr(response, "request", None)
 
     def __str__(self) -> str:
         """
@@ -58,7 +54,7 @@ class PlisioAPIException(PlisioException):
             str: String representation.
         """
 
-        return f'APIError(code={self.code}, name={self.name}): {self.message}'
+        return f"APIError(code={self.code}, name={self.name}): {self.message}"
 
 
 class PlisioRequestException(PlisioException):
@@ -84,4 +80,4 @@ class PlisioRequestException(PlisioException):
             str: String representation.
         """
 
-        return f'PlisioRequestException: {self.message}'
+        return f"PlisioRequestException: {self.message}"

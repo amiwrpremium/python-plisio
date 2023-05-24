@@ -25,9 +25,7 @@ from pydantic import (  # pylint: disable=no-name-in-module
     EmailStr as _EmailStr,
 )
 
-from . import (
-    enums as _enums
-)
+from . import enums as _enums
 
 Text = _Union[str]
 
@@ -74,7 +72,7 @@ SupportedCurrency = _Literal[
     "TRX",
     "BNB",
     "BUSD",
-    "USDT_BSC"
+    "USDT_BSC",
 ]
 
 SupportedFiat = _Literal[
@@ -244,7 +242,7 @@ SupportedFiat = _Literal[
     "ZAR",
     "ZMK",
     "ZMW",
-    "ZWL"
+    "ZWL",
 ]
 
 Currencies = _Union[_enums.Currencies, SupportedCurrency]
@@ -271,14 +269,7 @@ TransactionType = _Union[_enums.TransactionType, _TransactionType]
 OptionalTransactionType = _Optional[TransactionType]
 
 _TransactionStatus = _Literal[
-    "new",
-    "pending",
-    "pending_internal",
-    "expired",
-    "completed",
-    "mismatch",
-    "error",
-    "cancelled"
+    "new", "pending", "pending_internal", "expired", "completed", "mismatch", "error", "cancelled"
 ]
 TransactionStatus = _Union[_enums.TransactionStatus, _TransactionStatus]
 OptionalTransactionStatus = _Optional[TransactionStatus]

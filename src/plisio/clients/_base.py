@@ -33,6 +33,16 @@ class BaseClient(ABC):
         self._session = self._init_session()
         self._requests_params = requests_params
 
+    def __str__(self) -> _t.Text:
+        """
+        Get string representation.
+
+        Returns:
+            str: String representation.
+        """
+
+        return f"<{self.__class__.__name__}: {self.BASE_URL}/{self.API_VERSION_V1}>"
+
     def _get_uri(self, path: _t.Text, version: _t.Text = API_VERSION_V1) -> _t.Text:
         """
         Get URI.
@@ -60,11 +70,7 @@ class BaseClient(ABC):
             dict: Params.
         """
 
-        return {
-            key: value
-            for key, value in locals_.items()
-            if key != "self" and not (exclude_unset and value is None)
-        }
+        return {key: value for key, value in locals_.items() if key != "self" and not (exclude_unset and value is None)}
 
     @staticmethod
     def _get_headers() -> _t.Headers:
@@ -81,10 +87,7 @@ class BaseClient(ABC):
         }
 
     def _get_request_kwargs(  # type: ignore[no-untyped-def]
-            self,
-            method: _t.Methods,
-            force_params: bool = False,
-            **kwargs
+        self, method: _t.Methods, force_params: bool = False, **kwargs
     ) -> _t.DictStrAny:
         """
         Get request kwargs.
@@ -98,7 +101,7 @@ class BaseClient(ABC):
             dict: Request kwargs.
         """
 
-        kwargs['timeout'] = self.REQUEST_TIMEOUT
+        kwargs["timeout"] = self.REQUEST_TIMEOUT
 
         if self._requests_params:
             kwargs.update(self._requests_params)
@@ -106,27 +109,27 @@ class BaseClient(ABC):
         data = kwargs.pop("data", None)
 
         if data and isinstance(data, dict):
-            kwargs['data'] = data
+            kwargs["data"] = data
 
-            if 'requests_params' in kwargs['data']:
-                kwargs.update(kwargs['data']['requests_params'])
-                del kwargs['data']['requests_params']
+            if "requests_params" in kwargs["data"]:
+                kwargs.update(kwargs["data"]["requests_params"])
+                del kwargs["data"]["requests_params"]
 
-            kwargs['data']['api_key'] = self.api_key
+            kwargs["data"]["api_key"] = self.api_key
 
         if data and (str(method).upper() == _Methods.GET or force_params):
             _ = ""
-            for data in kwargs['data'].items():
+            for data in kwargs["data"].items():
                 key = data[0]
                 if isinstance(data[1], list):
-                    value = ','.join(data[1])
+                    value = ",".join(data[1])
                 else:
                     value = str(data[1])
 
                 _ += f"{key}={value}&"
 
-            kwargs['params'] = _.rstrip('&')
-            del kwargs['data']
+            kwargs["params"] = _.rstrip("&")
+            del kwargs["data"]
 
         return kwargs
 
@@ -157,11 +160,7 @@ class BaseClient(ABC):
 
     @abstractmethod
     def _request(  # type: ignore[no-untyped-def]
-            self,
-            method: _t.Methods,
-            uri: _t.Text,
-            force_params: bool = False,
-            **kwargs  # type: ignore[no-untyped-def]
+        self, method: _t.Methods, uri: _t.Text, force_params: bool = False, **kwargs  # type: ignore[no-untyped-def]
     ) -> _t.Result:
         """
         Make request.
@@ -184,10 +183,10 @@ class BaseClient(ABC):
 
     @abstractmethod
     def _get(  # type: ignore[no-untyped-def]
-            self,
-            path: _t.Text,
-            version: _t.Text = API_VERSION_V1,
-            **kwargs,  # type: ignore[no-untyped-def]
+        self,
+        path: _t.Text,
+        version: _t.Text = API_VERSION_V1,
+        **kwargs,  # type: ignore[no-untyped-def]
     ) -> _t.Result:
         """
         Make GET request.
@@ -204,10 +203,10 @@ class BaseClient(ABC):
 
     @abstractmethod
     def _post(  # type: ignore[no-untyped-def]
-            self,
-            path: _t.Text,
-            version: _t.Text = API_VERSION_V1,
-            **kwargs,  # type: ignore[no-untyped-def]
+        self,
+        path: _t.Text,
+        version: _t.Text = API_VERSION_V1,
+        **kwargs,  # type: ignore[no-untyped-def]
     ) -> _t.Result:
         """
         Make POST request.
@@ -224,10 +223,10 @@ class BaseClient(ABC):
 
     @abstractmethod
     def _put(  # type: ignore[no-untyped-def]
-            self,
-            path: _t.Text,
-            version: _t.Text = API_VERSION_V1,
-            **kwargs,  # type: ignore[untyped-definition]
+        self,
+        path: _t.Text,
+        version: _t.Text = API_VERSION_V1,
+        **kwargs,  # type: ignore[untyped-definition]
     ) -> _t.Result:
         """
         Make PUT request.
@@ -244,10 +243,10 @@ class BaseClient(ABC):
 
     @abstractmethod
     def _delete(  # type: ignore[no-untyped-def]
-            self,
-            path: _t.Text,
-            version: _t.Text = API_VERSION_V1,
-            **kwargs,  # type: ignore[no-untyped-def]
+        self,
+        path: _t.Text,
+        version: _t.Text = API_VERSION_V1,
+        **kwargs,  # type: ignore[no-untyped-def]
     ) -> _t.Result:
         """
         Make DELETE request.

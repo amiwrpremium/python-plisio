@@ -7,7 +7,7 @@ Async client for Plisio API.
 from uuid import uuid4 as _uuid4
 import requests as _requests
 
-from .base import BaseClient as _BaseClient
+from ._base import BaseClient as _BaseClient
 from .. import _types as _t
 from .. import exceptions as _e
 from ..enums import Methods as _Methods
@@ -47,9 +47,7 @@ class Client(_BaseClient):
         """
 
         if not 200 <= response.status_code < 300:
-            raise _e.PlisioAPIException(
-                response, response.status_code, response.text
-            )
+            raise _e.PlisioAPIException(response, response.status_code, response.text)
 
         try:
             data: _t.Result = response.json()
@@ -60,11 +58,7 @@ class Client(_BaseClient):
         return data
 
     def _request(  # type: ignore[no-untyped-def]
-            self,
-            method: _t.Methods,
-            uri: _t.Text,
-            force_params: bool = False,
-            **kwargs  # type: ignore[no-untyped-def]
+        self, method: _t.Methods, uri: _t.Text, force_params: bool = False, **kwargs  # type: ignore[no-untyped-def]
     ) -> _t.Result:
         """
         Make request.
@@ -89,10 +83,7 @@ class Client(_BaseClient):
         return self._handle_response(response)
 
     def _get(  # type: ignore[no-untyped-def]
-            self,
-            path: _t.Text,
-            version: _t.Text = _BaseClient.API_VERSION_V1,
-            **kwargs
+        self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs
     ) -> _t.Result:
         """
         Make GET request.
@@ -113,10 +104,7 @@ class Client(_BaseClient):
         return self._request(_Methods.GET, uri, **kwargs)
 
     def _post(  # type: ignore[no-untyped-def]
-            self,
-            path: _t.Text,
-            version: _t.Text = _BaseClient.API_VERSION_V1,
-            **kwargs
+        self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs
     ) -> _t.Result:
         """
         Make POST request.
@@ -138,10 +126,7 @@ class Client(_BaseClient):
         return self._request(_Methods.POST, uri, **kwargs)
 
     def _put(  # type: ignore[no-untyped-def]
-            self,
-            path: _t.Text,
-            version: _t.Text = _BaseClient.API_VERSION_V1,
-            **kwargs
+        self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs
     ) -> _t.Result:
         """
         Make PUT request.
@@ -163,10 +148,7 @@ class Client(_BaseClient):
         return self._request(_Methods.PUT, uri, **kwargs)
 
     def _delete(  # type: ignore[no-untyped-def]
-            self,
-            path: _t.Text,
-            version: _t.Text = _BaseClient.API_VERSION_V1,
-            **kwargs
+        self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs
     ) -> _t.Result:
         """
         Make DELETE request.
@@ -188,27 +170,30 @@ class Client(_BaseClient):
         return self._request(_Methods.DELETE, uri, **kwargs)
 
     def invoice(  # pylint: disable=too-many-arguments, too-many-locals
-            self,
-            order_name: _t.Text,
-            currency: _t.Currencies,
-            amount: _t.NumberLike,
-            order_number: _t.NumberLike = str(_uuid4()),
-            source_currency: _t.OptionalFiats = None,
-            source_amount: _t.OptionalNumberLike = None,
-            allowed_psys_cids: _t.OptionalPsysCids = None,
-            description: _t.OptionalText = None,
-            callback_url: _t.OptionalLink = None,
-            success_callback_url: _t.OptionalLink = None,
-            fail_callback_url: _t.OptionalLink = None,
-            email: _t.OptionalEmail = None,
-            language: _t.OptionalText = 'en_US',
-            plugin: _t.OptionalText = None,
-            version: _t.OptionalText = None,
-            redirect_to_invoice: _t.OptionalBool = None,
-            expire_min: _t.OptionalNumberLike = None
+        self,
+        order_name: _t.Text,
+        currency: _t.Currencies,
+        amount: _t.NumberLike,
+        order_number: _t.NumberLike = str(_uuid4()),
+        source_currency: _t.OptionalFiats = None,
+        source_amount: _t.OptionalNumberLike = None,
+        allowed_psys_cids: _t.OptionalPsysCids = None,
+        description: _t.OptionalText = None,
+        callback_url: _t.OptionalLink = None,
+        success_callback_url: _t.OptionalLink = None,
+        fail_callback_url: _t.OptionalLink = None,
+        email: _t.OptionalEmail = None,
+        language: _t.OptionalText = "en_US",
+        plugin: _t.OptionalText = None,
+        version: _t.OptionalText = None,
+        redirect_to_invoice: _t.OptionalBool = None,
+        expire_min: _t.OptionalNumberLike = None,
     ) -> _t.Result:
         """
         Create invoice.
+
+        See Also:
+            https://plisio.net/documentation/endpoints/create-an-invoice
 
         Args:
             order_name (str): Order name.
@@ -238,20 +223,23 @@ class Client(_BaseClient):
         """
 
         params = self._get_params(locals())
-        return self._get('invoices/new', data=params, force_params=True)
+        return self._get("invoices/new", data=params, force_params=True)
 
     def transactions(  # pylint: disable=too-many-arguments, too-many-locals
-            self,
-            page: _t.OptionalNumberLike = None,
-            limit: _t.OptionalNumberLike = None,
-            shop_id: _t.OptionalNumberLike = None,
-            type: _t.OptionalTransactionStatus = None,  # pylint: disable=redefined-builtin
-            status: _t.OptionalTransactionStatus = None,
-            currency: _t.OptionalCurrencies = None,
-            search: _t.OptionalText = None,
+        self,
+        page: _t.OptionalNumberLike = None,
+        limit: _t.OptionalNumberLike = None,
+        shop_id: _t.OptionalNumberLike = None,
+        type: _t.OptionalTransactionStatus = None,  # pylint: disable=redefined-builtin
+        status: _t.OptionalTransactionStatus = None,
+        currency: _t.OptionalCurrencies = None,
+        search: _t.OptionalText = None,
     ) -> _t.Result:
         """
         Get transactions.
+
+        See Also:
+            https://plisio.net/documentation/endpoints/transactions
 
         Args:
             page (int): Page.
@@ -271,18 +259,21 @@ class Client(_BaseClient):
         """
 
         params = self._get_params(locals())
-        return self._get('operations', data=params, force_params=True)
+        return self._get("operations", data=params, force_params=True)
 
     def withdraw(  # pylint: disable=too-many-arguments
-            self,
-            currency: _t.Currencies,
-            type: _t.WithdrawType,  # pylint: disable=redefined-builtin
-            to: _t.Text,  # pylint: disable=invalid-name
-            amount: _t.NumberLike,
-            fee_plan: _t.OptionalText = None,
+        self,
+        currency: _t.Currencies,
+        type: _t.WithdrawType,  # pylint: disable=redefined-builtin
+        to: _t.Text,  # pylint: disable=invalid-name
+        amount: _t.NumberLike,
+        fee_plan: _t.OptionalText = None,
     ) -> _t.Result:
         """
         Withdraw.
+
+        See Also:
+            https://plisio.net/documentation/endpoints/withdrawal-mass-withdrawal
 
         Args:
             currency (str): Currency.
@@ -300,4 +291,4 @@ class Client(_BaseClient):
         """
 
         params = self._get_params(locals())
-        return self._get('operations/withdraw', data=params, force_params=True)
+        return self._get("operations/withdraw", data=params, force_params=True)
