@@ -20,7 +20,7 @@ from requests import (
     Response as SyncRequestResponse,
 )
 
-from pydantic import (
+from pydantic import (  # pylint: disable=no-name-in-module
     HttpUrl as _HttpUrl,
     EmailStr as _EmailStr,
 )
@@ -29,7 +29,7 @@ from . import (
     enums as _enums
 )
 
-Text = _Union[str, bytes]
+Text = _Union[str]
 
 Number = _Union[int, float]
 NumberLike = _Union[int, float, Text]

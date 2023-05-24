@@ -2,6 +2,10 @@
 Enum for Plisio API
 """
 
+from typing import (
+    Iterator as _Iterator
+)
+
 from enum import (
     Enum as _Enum,
     EnumMeta as _EnumMeta,
@@ -13,43 +17,43 @@ class EnumMeta(_EnumMeta):
     Enum Meta.
     """
 
-    def __iter__(cls):
+    def __iter__(cls) -> _Iterator:
         """
         Iterate over Enum.
         """
 
-        return (
+        return (  # type: ignore[var-annotated]
             (member.value, member.name)
             for member in super().__iter__()
         )
 
-    def __getitem__(cls, name: str):
+    def __getitem__(cls, name: str):  # type: ignore[no-untyped-def]
         """
         Get Enum item by name.
         """
 
-        return cls[name.upper()]
+        return cls[name.upper()]  # pylint: disable=unsubscriptable-object
 
-    def __contains__(cls, name: str):
+    def __contains__(cls, name: str) -> bool:  # type: ignore[override]
         """
         Check if Enum contains item.
         """
 
-        return name.upper() in cls.__members__
+        return name.upper() in cls.__members__  # pylint: disable=unsupported-membership-test
 
-    def __str__(self):
+    def __str__(cls) -> str:
         """
         String representation.
         """
 
-        return self.__name__
+        return f'<enum {cls.__name__}>'
 
-    def __repr__(self):
+    def __repr__(cls) -> str:
         """
         Representation.
         """
 
-        return f'<enum {self.__name__}>'
+        return f'<enum {cls.__name__}>'
 
 
 class Enum(_Enum, metaclass=EnumMeta):
@@ -57,14 +61,14 @@ class Enum(_Enum, metaclass=EnumMeta):
     Enum.
     """
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         String representation.
         """
 
         return str(self.value)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Representation.
         """
@@ -278,23 +282,23 @@ class FiatCurrency(Enum):
 
 
 class TransactionType(Enum):
-    cash_in = "cash_in"
-    cash_out = "cash_out"
-    mass_cash_out = "mass_cash_out"
-    invoice = "invoice"
+    CASH_IN = "cash_in"
+    CASH_OUT = "cash_out"
+    MASS_CASH_OUT = "mass_cash_out"
+    INVOICE = "invoice"
 
 
 class TransactionStatus(Enum):
-    new = "new"
-    pending = "pending"
-    pending_internal = "pending internal"
-    expired = "expired"
-    completed = "completed"
-    mismatch = "mismatch"
-    error = "error"
-    cancelled = "cancelled"
+    NEW = "new"
+    PENDING = "pending"
+    PENDING_INTERNAL = "pending internal"
+    EXPIRED = "expired"
+    COMPLETED = "completed"
+    MISMATCH = "mismatch"
+    ERROR = "error"
+    CANCELLED = "cancelled"
 
 
 class WithdrawType(Enum):
-    cash_out = "cash_out"
-    mass_cash_out = "mass_cash_out"
+    CASH_OUT = "cash_out"
+    MASS_CASH_OUT = "mass_cash_out"

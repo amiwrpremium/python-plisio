@@ -3,8 +3,8 @@ Base client class.
 """
 
 from abc import (
-    ABC as ABC,
-    abstractmethod as abstractmethod,
+    ABC,
+    abstractmethod,
 )
 
 from .. import _types as _t
@@ -80,7 +80,12 @@ class BaseClient(ABC):
             "Accept": "application/json",
         }
 
-    def _get_request_kwargs(self, method: _t.Methods, force_params: bool = False, **kwargs) -> _t.DictStrAny:
+    def _get_request_kwargs(  # type: ignore[no-untyped-def]
+            self,
+            method: _t.Methods,
+            force_params: bool = False,
+            **kwargs
+    ) -> _t.DictStrAny:
         """
         Get request kwargs.
 
@@ -105,7 +110,7 @@ class BaseClient(ABC):
 
             if 'requests_params' in kwargs['data']:
                 kwargs.update(kwargs['data']['requests_params'])
-                del (kwargs['data']['requests_params'])
+                del kwargs['data']['requests_params']
 
             kwargs['data']['api_key'] = self.api_key
 
@@ -116,12 +121,12 @@ class BaseClient(ABC):
                 if isinstance(data[1], list):
                     value = ','.join(data[1])
                 else:
-                    value = data[1]
+                    value = str(data[1])
 
                 _ += f"{key}={value}&"
 
             kwargs['params'] = _.rstrip('&')
-            del (kwargs['data'])
+            del kwargs['data']
 
         return kwargs
 
@@ -151,12 +156,12 @@ class BaseClient(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def _request(
+    def _request(  # type: ignore[no-untyped-def]
             self,
             method: _t.Methods,
             uri: _t.Text,
             force_params: bool = False,
-            **kwargs
+            **kwargs  # type: ignore[no-untyped-def]
     ) -> _t.Result:
         """
         Make request.
@@ -178,11 +183,11 @@ class BaseClient(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def _get(
+    def _get(  # type: ignore[no-untyped-def]
             self,
             path: _t.Text,
             version: _t.Text = API_VERSION_V1,
-            **kwargs,  # type: ignore[untyped-definition]
+            **kwargs,  # type: ignore[no-untyped-def]
     ) -> _t.Result:
         """
         Make GET request.
@@ -198,11 +203,11 @@ class BaseClient(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def _post(
+    def _post(  # type: ignore[no-untyped-def]
             self,
             path: _t.Text,
             version: _t.Text = API_VERSION_V1,
-            **kwargs,  # type: ignore[untyped-definition]
+            **kwargs,  # type: ignore[no-untyped-def]
     ) -> _t.Result:
         """
         Make POST request.
@@ -218,7 +223,7 @@ class BaseClient(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def _put(
+    def _put(  # type: ignore[no-untyped-def]
             self,
             path: _t.Text,
             version: _t.Text = API_VERSION_V1,
@@ -238,11 +243,11 @@ class BaseClient(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def _delete(
+    def _delete(  # type: ignore[no-untyped-def]
             self,
             path: _t.Text,
             version: _t.Text = API_VERSION_V1,
-            **kwargs,  # type: ignore[untyped-definition]
+            **kwargs,  # type: ignore[no-untyped-def]
     ) -> _t.Result:
         """
         Make DELETE request.
@@ -253,122 +258,6 @@ class BaseClient(ABC):
 
         Returns:
             dict: Response data.
-        """
-
-        raise NotImplementedError
-
-    @abstractmethod
-    def invoice(  # pylint: disable=too-many-arguments
-            self,
-            order_name: _t.Text,
-            currency: _t.Currencies,
-            amount: _t.NumberLike,
-            order_number: _t.NumberLike,
-            source_currency: _t.OptionalFiats = None,
-            source_amount: _t.OptionalNumberLike = None,
-            allowed_psys_cids: _t.OptionalPsysCids = None,
-            description: _t.OptionalText = None,
-            callback_url: _t.OptionalLink = None,
-            success_callback_url: _t.OptionalLink = None,
-            fail_callback_url: _t.OptionalLink = None,
-            email: _t.OptionalEmail = None,
-            language: _t.OptionalText = 'en_US',
-            plugin: _t.OptionalText = None,
-            version: _t.OptionalText = None,
-            redirect_to_invoice: _t.OptionalBool = None,
-            expire_min: _t.OptionalNumberLike = None
-    ) -> _t.Result:
-        """
-        Create invoice.
-
-        Args:
-            order_name (str): Order name.
-            order_number (int): Order number.
-            currency (str): Currency.
-            amount (int): Amount.
-            source_currency (str): Source currency.
-            source_amount (int): Source amount.
-            allowed_psys_cids (list): Allowed payment systems.
-            description (str): Description.
-            callback_url (str): Callback URL.
-            success_callback_url (str): Success callback URL.
-            fail_callback_url (str): Fail callback URL.
-            email (str): Email.
-            language (str): Language.
-            plugin (str): Plugin.
-            version (str): Version.
-            redirect_to_invoice (bool): Redirect to invoice.
-            expire_min (int): Expire min.
-
-        Returns:
-            dict: Response data.
-
-        Raises:
-            ValueError: If both amount and source_amount are not set.
-            PlisioRequestException: If request failed.
-            PlisioAPIException: If API returned error.
-        """
-
-        raise NotImplementedError
-
-    @abstractmethod
-    def transactions(
-            self,
-            page: _t.OptionalNumberLike = None,
-            limit: _t.OptionalNumberLike = None,
-            shop_id: _t.OptionalNumberLike = None,
-            type: _t.OptionalTransactionStatus = None,  # pylint: disable=redefined-builtin
-            status: _t.OptionalTransactionStatus = None,
-            currency: _t.OptionalCurrencies = None,
-            search: _t.OptionalText = None,
-    ) -> _t.Result:
-        """
-        Get transactions.
-
-        Args:
-            page (int): Page.
-            limit (int): Limit.
-            shop_id (int): Shop ID.
-            type (str): Type.
-            status (str): Status.
-            currency (str): Currency.
-            search (str): Search.
-
-        Returns:
-            dict: Response data.
-
-        Raises:
-            PlisioRequestException: If request failed.
-            PlisioAPIException: If API returned error.
-        """
-
-        raise NotImplementedError
-
-    @abstractmethod
-    def withdraw(
-            self,
-            currency: _t.Currencies,
-            type: _t.WithdrawType,  # pylint: disable=redefined-builtin
-            to: _t.Text,
-            amount: _t.NumberLike,
-            fee_plan: _t.Text = None,
-    ) -> _t.Result:
-        """
-        Withdraw.
-
-        Args:
-            currency (str): Currency.
-            type (str): Type.
-            to (str): To.
-            amount (int): Amount.
-            fee_plan (str): Fee plan.
-
-        Returns:
-            dict: Response data.
-
-        Raises:
-            PlisioRequestException: If request failed.
-            PlisioAPIException: If API returned error.
         """
 
         raise NotImplementedError

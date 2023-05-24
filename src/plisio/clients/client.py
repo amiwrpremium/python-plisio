@@ -2,15 +2,15 @@
 Async client for Plisio API.
 """
 
-import requests as _requests
+# pylint: disable=unused-argument
+
 from uuid import uuid4 as _uuid4
+import requests as _requests
 
 from .base import BaseClient as _BaseClient
 from .. import _types as _t
 from .. import exceptions as _e
 from ..enums import Methods as _Methods
-
-import curlify
 
 
 class Client(_BaseClient):
@@ -31,7 +31,7 @@ class Client(_BaseClient):
         session.headers.update(headers)
         return session
 
-    def _handle_response(self, response: _t.SyncRequestResponse) -> _t.Result:
+    def _handle_response(self, response: _t.SyncRequestResponse) -> _t.Result:  # type: ignore[override]
         """
         Handle response.
 
@@ -46,8 +46,6 @@ class Client(_BaseClient):
             PlisioAPIException: If API returned error.
         """
 
-        print(curlify.to_curl(response.request))
-
         if not 200 <= response.status_code < 300:
             raise _e.PlisioAPIException(
                 response, response.status_code, response.text
@@ -55,18 +53,18 @@ class Client(_BaseClient):
 
         try:
             data: _t.Result = response.json()
-        except ValueError:
+        except ValueError as exc:
             txt: str = response.text
-            raise _e.PlisioRequestException(f"Invalid JSON response: {txt}")
+            raise _e.PlisioRequestException(f"Invalid JSON response: {txt}") from exc
 
         return data
 
-    def _request(
+    def _request(  # type: ignore[no-untyped-def]
             self,
             method: _t.Methods,
             uri: _t.Text,
             force_params: bool = False,
-            **kwargs
+            **kwargs  # type: ignore[no-untyped-def]
     ) -> _t.Result:
         """
         Make request.
@@ -87,10 +85,15 @@ class Client(_BaseClient):
 
         requests_kwargs = self._get_request_kwargs(method, force_params, **kwargs)
 
-        self.response = getattr(self._session, str(method).lower())(uri, **requests_kwargs)
-        return self._handle_response(self.response)
+        response = getattr(self._session, str(method).lower())(uri, **requests_kwargs)
+        return self._handle_response(response)
 
-    def _get(self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs) -> _t.Result:
+    def _get(  # type: ignore[no-untyped-def]
+            self,
+            path: _t.Text,
+            version: _t.Text = _BaseClient.API_VERSION_V1,
+            **kwargs
+    ) -> _t.Result:
         """
         Make GET request.
 
@@ -109,7 +112,12 @@ class Client(_BaseClient):
         uri = self._get_uri(path, version)
         return self._request(_Methods.GET, uri, **kwargs)
 
-    def _post(self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs) -> _t.Result:
+    def _post(  # type: ignore[no-untyped-def]
+            self,
+            path: _t.Text,
+            version: _t.Text = _BaseClient.API_VERSION_V1,
+            **kwargs
+    ) -> _t.Result:
         """
         Make POST request.
 
@@ -129,7 +137,12 @@ class Client(_BaseClient):
         uri = self._get_uri(path, version)
         return self._request(_Methods.POST, uri, **kwargs)
 
-    def _put(self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs) -> _t.Result:
+    def _put(  # type: ignore[no-untyped-def]
+            self,
+            path: _t.Text,
+            version: _t.Text = _BaseClient.API_VERSION_V1,
+            **kwargs
+    ) -> _t.Result:
         """
         Make PUT request.
 
@@ -149,7 +162,12 @@ class Client(_BaseClient):
         uri = self._get_uri(path, version)
         return self._request(_Methods.PUT, uri, **kwargs)
 
-    def _delete(self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs) -> _t.Result:
+    def _delete(  # type: ignore[no-untyped-def]
+            self,
+            path: _t.Text,
+            version: _t.Text = _BaseClient.API_VERSION_V1,
+            **kwargs
+    ) -> _t.Result:
         """
         Make DELETE request.
 
@@ -169,7 +187,7 @@ class Client(_BaseClient):
         uri = self._get_uri(path, version)
         return self._request(_Methods.DELETE, uri, **kwargs)
 
-    def invoice(
+    def invoice(  # pylint: disable=too-many-arguments, too-many-locals
             self,
             order_name: _t.Text,
             currency: _t.Currencies,
@@ -222,7 +240,7 @@ class Client(_BaseClient):
         params = self._get_params(locals())
         return self._get('invoices/new', data=params, force_params=True)
 
-    def transactions(
+    def transactions(  # pylint: disable=too-many-arguments, too-many-locals
             self,
             page: _t.OptionalNumberLike = None,
             limit: _t.OptionalNumberLike = None,
@@ -255,13 +273,13 @@ class Client(_BaseClient):
         params = self._get_params(locals())
         return self._get('operations', data=params, force_params=True)
 
-    def withdraw(
+    def withdraw(  # pylint: disable=too-many-arguments
             self,
             currency: _t.Currencies,
             type: _t.WithdrawType,  # pylint: disable=redefined-builtin
-            to: _t.Text,
+            to: _t.Text,  # pylint: disable=invalid-name
             amount: _t.NumberLike,
-            fee_plan: _t.Text = None,
+            fee_plan: _t.OptionalText = None,
     ) -> _t.Result:
         """
         Withdraw.

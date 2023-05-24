@@ -2,6 +2,9 @@
 Async client for Plisio API.
 """
 
+# pylint: disable=unused-argument
+
+
 from aiohttp import (
     ClientSession as _Session
 )
@@ -23,7 +26,10 @@ class AsyncClient(_BaseClient):
             headers=headers,
         )
 
-    async def _handle_response(self, response: _t.AsyncRequestResponse) -> _t.Result:
+    async def _handle_response(  # type: ignore[override] # pylint: disable=invalid-overridden-method
+            self,
+            response: _t.AsyncRequestResponse
+    ) -> _t.Result:
         """
         Handle response.
 
@@ -45,13 +51,13 @@ class AsyncClient(_BaseClient):
 
         try:
             data: _t.Result = await response.json()
-        except ValueError:
+        except ValueError as exc:
             txt: str = await response.text()
-            raise _e.PlisioRequestException(f"Invalid JSON response: {txt}")
+            raise _e.PlisioRequestException(f"Invalid JSON response: {txt}") from exc
 
         return data
 
-    async def _request(
+    async def _request(  # type: ignore[override, no-untyped-def] # pylint: disable=invalid-overridden-method
             self,
             method: _t.Methods,
             uri: _t.Text,
@@ -77,10 +83,14 @@ class AsyncClient(_BaseClient):
         requests_kwargs = self._get_request_kwargs(method, force_params, **kwargs)
 
         async with getattr(self._session, str(method).lower())(uri, **requests_kwargs) as response:
-            self.response = response
             return await self._handle_response(response)
 
-    async def _get(self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs) -> _t.Result:
+    async def _get(  # type: ignore[override, no-untyped-def] # pylint: disable=invalid-overridden-method
+            self,
+            path: _t.Text,
+            version: _t.Text = _BaseClient.API_VERSION_V1,
+            **kwargs
+    ) -> _t.Result:
         """
         Make GET request.
 
@@ -99,7 +109,12 @@ class AsyncClient(_BaseClient):
         uri = self._get_uri(path, version)
         return await self._request(_Methods.GET, uri, **kwargs)
 
-    async def _post(self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs) -> _t.Result:
+    async def _post(  # type: ignore[override, no-untyped-def] # pylint: disable=invalid-overridden-method
+            self,
+            path: _t.Text,
+            version: _t.Text = _BaseClient.API_VERSION_V1,
+            **kwargs
+    ) -> _t.Result:
         """
         Make POST request.
 
@@ -119,7 +134,12 @@ class AsyncClient(_BaseClient):
         uri = self._get_uri(path, version)
         return await self._request(_Methods.POST, uri, **kwargs)
 
-    async def _put(self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs) -> _t.Result:
+    async def _put(  # type: ignore[override, no-untyped-def] # pylint: disable=invalid-overridden-method
+            self,
+            path: _t.Text,
+            version: _t.Text = _BaseClient.API_VERSION_V1,
+            **kwargs
+    ) -> _t.Result:
         """
         Make PUT request.
 
@@ -139,7 +159,12 @@ class AsyncClient(_BaseClient):
         uri = self._get_uri(path, version)
         return await self._request(_Methods.PUT, uri, **kwargs)
 
-    async def _delete(self, path: _t.Text, version: _t.Text = _BaseClient.API_VERSION_V1, **kwargs) -> _t.Result:
+    async def _delete(  # type: ignore[override, no-untyped-def] # pylint: disable=invalid-overridden-method
+            self,
+            path: _t.Text,
+            version: _t.Text = _BaseClient.API_VERSION_V1,
+            **kwargs
+    ) -> _t.Result:
         """
         Make DELETE request.
 
@@ -159,7 +184,7 @@ class AsyncClient(_BaseClient):
         uri = self._get_uri(path, version)
         return await self._request(_Methods.DELETE, uri, **kwargs)
 
-    async def invoice(
+    async def invoice(  # pylint: disable=too-many-arguments, too-many-locals
             self,
             order_name: _t.Text,
             currency: _t.Currencies,
@@ -212,7 +237,7 @@ class AsyncClient(_BaseClient):
         params = self._get_params(locals())
         return await self._get('invoices/new', data=params, force_params=True)
 
-    def transactions(
+    async def transactions(  # pylint: disable=too-many-arguments
             self,
             page: _t.OptionalNumberLike = None,
             limit: _t.OptionalNumberLike = None,
@@ -245,13 +270,13 @@ class AsyncClient(_BaseClient):
         params = self._get_params(locals())
         return await self._get('operations', data=params, force_params=True)
 
-    def withdraw(
+    async def withdraw(  # pylint: disable=too-many-arguments
             self,
             currency: _t.Currencies,
             type: _t.WithdrawType,  # pylint: disable=redefined-builtin
-            to: _t.Text,
+            to: _t.Text,  # pylint: disable=invalid-name
             amount: _t.NumberLike,
-            fee_plan: _t.Text = None,
+            fee_plan: _t.OptionalText = None,
     ) -> _t.Result:
         """
         Withdraw.
