@@ -52,7 +52,7 @@ repos:
         name: pylint
         entry: venv/bin/pylint
         files: src
-        language: system
+        language: python_venv
         types: [ python ]
         args:
           [
