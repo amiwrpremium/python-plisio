@@ -45,6 +45,7 @@ mkdocs-section-index = "^0.3.5"
 mkdocs-autorefs = "^0.4.1"
 pydocstyle = "^6.3.0"
 black = "^23.3.0"
+mkdocstrings-python = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]
