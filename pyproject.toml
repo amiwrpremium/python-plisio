@@ -53,3 +53,6 @@ line-length = 120
 [tool.pydocstyle]
 convention = "google"
 add-ignore = "D212, D202, D200"
+
+[tool.pylint]
+disable = "too-few-public-methods, too-many-public-methods, logging-fstring-interpolation, line-too-long"
