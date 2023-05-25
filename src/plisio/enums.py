@@ -313,3 +313,12 @@ class WithdrawType(Enum):
 
     CASH_OUT = "cash_out"
     MASS_CASH_OUT = "mass_cash_out"
+
+
+class FeePlans(Enum):
+    """
+    Fee Plans.
+    """
+
+    NORMAL = "normal"
+    PRIORITY = "priority"

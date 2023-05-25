@@ -267,7 +267,7 @@ class Client(_BaseClient):
         type: _t.WithdrawType,  # pylint: disable=redefined-builtin
         to: _t.Text,  # pylint: disable=invalid-name
         amount: _t.NumberLike,
-        fee_plan: _t.OptionalText = None,
+        fee_plan: _t.OptionalFeePlans = None,
     ) -> _t.Result:
         """
         Withdraw.
@@ -292,3 +292,141 @@ class Client(_BaseClient):
 
         params = self._get_params(locals())
         return self._get("operations/withdraw", data=params, force_params=True)
+
+    def transaction_details(self, id: _t.Text) -> _t.Result:  # pylint: disable=invalid-name
+        """
+        Get transaction details.
+
+        See Also:
+            https://plisio.net/documentation/endpoints/transaction-details
+
+        Args:
+            id (str): Transaction ID.
+
+        Returns:
+            dict: Response data.
+
+        Raises:
+            PlisioRequestException: If request failed.
+            PlisioAPIException: If API returned error.
+        """
+
+        return self._get(f"operations/{id}")
+
+    def balance(self, psys_cid: _t.OptionalCurrencies = None) -> _t.Result:
+        """
+        Get balance.
+
+        See Also:
+            https://plisio.net/documentation/endpoints/balance
+
+        Args:
+            psys_cid (str): Payment system CID.
+
+        Returns:
+            dict: Response data.
+
+        Raises:
+            PlisioRequestException: If request failed.
+            PlisioAPIException: If API returned error.
+        """
+
+        return self._get("balance/", data={"psys_cid": psys_cid}, force_params=True)
+
+    def fee_plans(self, psys_cid: _t.Currencies) -> _t.Result:
+        """
+        Get fee plans.
+
+        See Also:
+            https://plisio.net/documentation/endpoints/fee-plans
+
+        Args:
+            psys_cid (str): Payment system CID.
+
+        Returns:
+            dict: Response data.
+
+        Raises:
+            PlisioRequestException: If request failed.
+            PlisioAPIException: If API returned error.
+        """
+
+        return self._get(f"operations/fee-plan/{psys_cid}")
+
+    async def fee_estimation(
+        self,
+        currency: _t.OptionalCurrencies = None,
+        addresses: _t.OptionalListStr = None,
+        amounts: _t.OptionalListNumberLike = None,
+        fee_plan: _t.OptionalFeePlans = None,
+    ) -> _t.Result:
+        """
+        Fee estimation.
+
+        See Also:
+            https://plisio.net/documentation/endpoints/fee-estimation
+
+        Args:
+            currency (str): Currency.
+            addresses (list): Addresses
+            amounts (list): Amounts.
+            fee_plan (str): Fee plan.
+
+        Returns:
+            dict: Response data.
+
+        Raises:
+            PlisioRequestException: If request failed.
+            PlisioAPIException: If API returned error.
+        """
+
+        params = self._get_params(locals())
+        return self._get("operations/fee", data=params, force_params=True)
+
+    def plisio_fee(  # pylint: disable=too-many-arguments
+        self,
+        currency: _t.OptionalCurrencies = None,
+        addresses: _t.OptionalListStr = None,
+        amounts: _t.OptionalListNumberLike = None,
+        type: _t.OptionalTransactionType = None,  # pylint: disable=redefined-builtin
+        fee_plan: _t.OptionalFeePlans = None,
+    ) -> _t.Result:
+        """
+        Plisio fee.
+
+        See Also:
+            https://plisio.net/documentation/endpoints/plisio-fee
+
+        Args:
+            currency (str): Currency.
+            addresses (list): Addresses
+            amounts (list): Amounts.
+            type (str): Type.
+            fee_plan (str): Fee plan.
+
+        Returns:
+            dict: Response data.
+
+        Raises:
+            PlisioRequestException: If request failed.
+            PlisioAPIException: If API returned error.
+        """
+        params = self._get_params(locals())
+        return self._get("operations/plisio-fee", data=params, force_params=True)
+
+    def crypto_coins(self) -> _t.Result:
+        """
+        Get crypto coins.
+
+        See Also:
+            https://plisio.net/documentation/endpoints/crypto-coins
+
+        Returns:
+            dict: Response data.
+
+        Raises:
+            PlisioRequestException: If request failed.
+            PlisioAPIException: If API returned error.
+        """
+
+        return self._get("crypto-coins")

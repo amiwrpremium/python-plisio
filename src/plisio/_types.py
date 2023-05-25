@@ -31,8 +31,12 @@ Text = _Union[str]
 
 Number = _Union[int, float]
 NumberLike = _Union[int, float, Text]
+ListNumberLike = _List[NumberLike]
+OptionalListNumberLike = _Optional[ListNumberLike]
 
 DictStrAny = _Dict[Text, _Union[Text, int, float, bool, None]]
+ListStr = _List[Text]
+OptionalListStr = _Optional[ListStr]
 
 OptionalText = _Optional[Text]
 OptionalBool = _Optional[bool]
@@ -280,3 +284,10 @@ _WithdrawType = _Literal[
 ]
 WithdrawType = _Union[_enums.WithdrawType, _WithdrawType]
 OptionalWithdrawType = _Optional[WithdrawType]
+
+_FeePlans = _Literal[
+    "normal",
+    "priority",
+]
+FeePlans = _Union[_enums.FeePlans, _FeePlans]
+OptionalFeePlans = _Optional[FeePlans]

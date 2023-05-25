@@ -1,3 +1,6 @@
+ci:
+  skip: [ pylint ]
+
 repos:
   - repo: https://github.com/python-poetry/poetry
     rev: '1.5.0'
@@ -58,9 +61,9 @@ repos:
     hooks:
       - id: pylint
         name: pylint
-        entry: pylint
+        entry: venv/bin/pylint
         files: src
-        language: python_venv
+        language: system
         types: [ python ]
         args:
           [
