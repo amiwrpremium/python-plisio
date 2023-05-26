@@ -1,7 +1,8 @@
 site_name: Python Plisio
+site_author: Amir Mahdi Erfani
 
-repo_url: https://github.com/amiwrpremium/python-plisio
 repo_name: amiwrpremium/python-plisio
+repo_url: https://github.com/amiwrpremium/python-plisio
 
 theme:
   name: material
@@ -34,6 +35,10 @@ theme:
     - search.suggest
     - search.suggest.highlight
     - content.code.annotate
+    - content.tabs.link
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
 
 
 plugins:
@@ -53,9 +58,14 @@ markdown_extensions:
       use_pygments: true
       guess_lang: true
       pygments_lang_class: true
+      line_spans: __span
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
 
 extra:
   social:

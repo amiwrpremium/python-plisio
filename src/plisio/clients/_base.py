@@ -55,7 +55,7 @@ class BaseClient(ABC):
             str: URI.
         """
 
-        return f"{self.BASE_URL}/{version}/{path}"
+        return f"{self.BASE_URL}/{version}/{path.lstrip('/').rstrip('/')}"
 
     @staticmethod
     def _get_params(locals_: _t.DictStrAny, exclude_unset: bool = True) -> _t.DictStrAny:
@@ -107,6 +107,7 @@ class BaseClient(ABC):
             kwargs.update(self._requests_params)
 
         data = kwargs.pop("data", None)
+        data.update({"api_key": self.api_key})
 
         if data and isinstance(data, dict):
             kwargs["data"] = data
@@ -114,8 +115,6 @@ class BaseClient(ABC):
             if "requests_params" in kwargs["data"]:
                 kwargs.update(kwargs["data"]["requests_params"])
                 del kwargs["data"]["requests_params"]
-
-            kwargs["data"]["api_key"] = self.api_key
 
         if data and (str(method).upper() == _Methods.GET or force_params):
             _ = ""

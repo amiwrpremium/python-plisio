@@ -225,7 +225,7 @@ class Client(_BaseClient):
         params = self._get_params(locals())
         return self._get("invoices/new", data=params, force_params=True)
 
-    def transactions(  # pylint: disable=too-many-arguments, too-many-locals
+    def transactions(  # pylint: disable=too-many-arguments
         self,
         page: _t.OptionalNumberLike = None,
         limit: _t.OptionalNumberLike = None,
@@ -311,7 +311,7 @@ class Client(_BaseClient):
             PlisioAPIException: If API returned error.
         """
 
-        return self._get(f"operations/{id}")
+        return self._get("operations", data={"id": id}, force_params=True)
 
     def balance(self, psys_cid: _t.OptionalCurrencies = None) -> _t.Result:
         """
@@ -331,7 +331,7 @@ class Client(_BaseClient):
             PlisioAPIException: If API returned error.
         """
 
-        return self._get("balance/", data={"psys_cid": psys_cid}, force_params=True)
+        return self._get("balance", data={"psys_cid": psys_cid}, force_params=True)
 
     def fee_plans(self, psys_cid: _t.Currencies) -> _t.Result:
         """
@@ -351,7 +351,7 @@ class Client(_BaseClient):
             PlisioAPIException: If API returned error.
         """
 
-        return self._get(f"operations/fee-plan/{psys_cid}")
+        return self._get("operations/fee-plan", data={"psys_cid": psys_cid}, force_params=True)
 
     async def fee_estimation(
         self,

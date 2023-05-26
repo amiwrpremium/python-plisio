@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-plisio"
-version = "2.0.1"
+version = "2.0.2"
 description = "Python SDK for Plisio API."
 authors = ["amiwrpremium <amiwrpremium@gmail.com>"]
 license = "MIT"
