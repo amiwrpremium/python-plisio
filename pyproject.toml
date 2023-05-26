@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-plisio"
-version = "2.0.0"
+version = "2.0.1"
 description = "Python SDK for Plisio API."
 authors = ["amiwrpremium <amiwrpremium@gmail.com>"]
 license = "MIT"
@@ -18,15 +18,14 @@ classifiers = [
     "Topic :: Utilities",
 ]
 packages = [
-    {include = "plisio"}
+    { include = "plisio", from = "src" }
 ]
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
 requests = "^2.31.0"
 aiohttp = "^3.8.4"
-pydantic = {extras = ["email"], version = "^1.10.8"}
-
+pydantic = { extras = ["email"], version = "^1.10.8" }
 
 [tool.poetry.group.dev.dependencies]
 curlify = "^2.2.1"

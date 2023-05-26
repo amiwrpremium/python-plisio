@@ -12,3 +12,8 @@ See [API Reference](https://plisio.net/documentation) for more information.
 
 from .client import Client
 from .async_client import AsyncClient
+
+__all__ = [
+    "Client",
+    "AsyncClient",
+]
