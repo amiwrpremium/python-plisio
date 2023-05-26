@@ -1,5 +1,9 @@
 ci:
-  skip: [ pylint ]
+  skip:
+    - pylint
+    - poetry-check
+    - poetry-lock
+    - poetry-export
 
 repos:
   - repo: https://github.com/python-poetry/poetry
