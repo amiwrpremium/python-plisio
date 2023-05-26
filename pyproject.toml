@@ -7,8 +7,22 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://amiwrpremium.github.io/python-plisio/"
 repository = "https://github.com/amiwrpremium/python-plisio"
-documentation = "https://amiwrpremium.github.io/python-plisio/"
-keywords = ["plisio", "api", "sdk", "python", "payments", "crypto", "gateway"]
+documentation = "https://python-plisio.readthedocs.io/en/latest/"
+keywords = [
+    "plisio",
+    "api",
+    "sdk",
+    "python",
+    "payments",
+    "crypto",
+    "gateway",
+    "crypto payment",
+    "bitcoin",
+    "etherium",
+    "blockchain",
+    "tron",
+    "BSC"
+]
 classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",

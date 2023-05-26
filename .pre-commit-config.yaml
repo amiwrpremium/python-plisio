@@ -14,7 +14,15 @@ repos:
         args:
           - --no-update
       - id: poetry-export
+        name: export requirements.txt
         args: [ "--format=requirements.txt", "--without-hashes", "-o", "requirements.txt" ]
+      - id: poetry-export
+        name: export requirements-dev.txt
+        args: [ "--format=requirements.txt", "--without-hashes", "-o", "requirements-dev.txt", "--only", "dev" ]
+      - id: poetry-export
+        name: export requirements-docs.txt
+        args: [ "--format=requirements.txt", "--without-hashes", "-o", "requirements-docs.txt", "--only", "docs" ]
+
 
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.4.0

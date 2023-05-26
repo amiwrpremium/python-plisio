@@ -1,0 +1,4 @@
+output-format: json
+
+ignore-paths:
+  - src/plisio/_types.py

@@ -22,8 +22,8 @@ payments in cryptocurrencies. Plisio enables your customers to pay with
 
 ## Installation
 
-Install using `pip`
-> $ pip install python-plisio
+Install using `pip` from [PyPI](https://pypi.org/project/python-plisio/):
+> pip install python-plisio
 
 Install from `git`
 > pip install git+https://github.com/amiwrpremium/python-plisio.git
