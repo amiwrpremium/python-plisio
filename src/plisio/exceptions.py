@@ -5,7 +5,6 @@ Exceptions for plisio.
 from json import loads as _loads
 from . import _types as _t
 
-
 __all__ = ["PlisioException", "PlisioAPIException", "PlisioRequestException"]
 
 
